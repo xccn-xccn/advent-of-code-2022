@@ -1,5 +1,5 @@
 from sys import argv
-
+from collections import deque
 def read_file(filename):
     with open(filename) as file:
         text = file.read()
@@ -26,26 +26,47 @@ def binary_search(arr, x):
     return low
 
 
-def main():
-    text = list(map(list,read_file(get_input_file()).splitlines()))
-    for line in text:
-        print(line)
+def valid(grid,y,x,visited,special,current_letter): #change
+    
+    #print((y,x) not in visited,'not seen?',y,x)
+    if not (0 <= y < len(grid) and 0 <= x < len(grid[0]) and (y,x) not in visited):
+        #print('false')
+        return False
+    new_letter = grid[y][x]    
+    return ord(special.get(current_letter,current_letter))+1 >= ord(special.get(new_letter,new_letter))
+    
 
-    queue = [[(0,0),0]]
+def main():
+    grid = list(map(list,read_file(get_input_file()).splitlines()))
+    for y,line in enumerate(grid):
+        for x,square in enumerate(line):
+            if square == 'S':
+                start = (y,x)
+
+    paths = deque([[[start]]])
     visited = set((0,0))
 
 
 
-    while queue:
-        current_node = queue.pop()
-        y,x = current_node[0]
-        move_count = current_node[1]+1
-        for neighbor in [(y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1)]:
-            neighbour_y,neighbor_x = neighbor
-            print(neighbour,neighbor_x,neighbour_y)
-            if 0 <= neighbour_y < len(text) and 0 <= neighbour_x < len(text[0]) and neighbor not in visited and ord(text[y][x])+1 >= ord:
-                queue.insert(-binary_search([x[1] for x in possible],move_count),[neighbour,move_count])
-                visited.add(neighbor)
-
+    while True:
+        #print(_,paths)
+        special = {"S":"a","E":"z"}
+        current_node = paths.popleft()
+        currently_taken = current_node[0]
+        current_y,current_x = currently_taken[-1]
+        current_letter = grid[current_y][current_x]
+        for neighbour in [(current_y - 1, current_x), (current_y + 1, current_x), (current_y, current_x - 1), (current_y, current_x + 1)]:
+            neighbour_y,neighbour_x = neighbour
+            #print(neighbour,neighbour_x,neighbour_y)
+            if valid(grid,neighbour_y,neighbour_x,visited,special,current_letter):
+                temp_path = currently_taken.copy()
+                temp_path.append((neighbour_y,neighbour_x))
+                paths.append([temp_path])
+                #print(currently_taken,paths,temp_path)
+                visited.add(neighbour)
+                #print(visited)
+                #print('valid !', paths)
+                if grid[neighbour_y][neighbour_x] == "E":
+                    return len(temp_path)-1
 if __name__ == "__main__":
     print(main())
