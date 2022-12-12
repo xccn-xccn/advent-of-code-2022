@@ -1,4 +1,4 @@
 from collections import deque
-queue = deque([1,2,3])
-queue.popleft()
-print(queue)
+paths = deque([[[(0,0),],]])
+print(paths)
+print(paths[0])
