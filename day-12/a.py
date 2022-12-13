@@ -43,7 +43,7 @@ def main():
                 start = (y,x)
 
     paths = deque([[[start]]])
-    visited = set((0,0))
+    visited = set(start)
 
 
 
@@ -57,7 +57,7 @@ def main():
             neighbour_y,neighbour_x = neighbour
             if valid(grid,neighbour_y,neighbour_x,visited,special,current_letter):
                 temp_path = currently_taken.copy()
-                temp_path.append((neighbour_y,neighbour_x))
+                temp_path.append(neighbour)
                 paths.append([temp_path])
                 visited.add(neighbour)
                 if grid[neighbour_y][neighbour_x] == "E":
