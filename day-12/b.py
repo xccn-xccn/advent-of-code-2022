@@ -40,17 +40,17 @@ def main():
     best_path = 999
     seen_start = set()
     while True:
-        print(best_path)
+        #print(best_path)
         start = find_start(seen_start)
         if start == None:
             return best_path
         seen_start.add(start)
-        print(start)
+        #print(start)
         paths = deque([[[start]]])
         visited = set(start)
         end = False
         while not end:
-            print(paths)
+            #print(paths)
             current_node,currently_taken,current_y,current_x,current_letter = set_variables()
             for neighbour in [(current_y - 1, current_x), (current_y + 1, current_x), (current_y, current_x - 1), (current_y, current_x + 1)]:
                 neighbour_y,neighbour_x = neighbour
@@ -64,5 +64,7 @@ def main():
                             best_path = len(temp_path) - 1
                         end = True
                         break
+            if not paths:
+                break
 if __name__ == "__main__":
     print(main())
