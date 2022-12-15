@@ -54,8 +54,14 @@ def find_outer(input):  # don't be trash
     pass
 
 
-def format_input(input):  # use recursion
-    pass
+def format_input(input,current = None):  # use recursion
+    output = []
+    for i,char in input:
+        if char == ',':
+            continue
+        elif char == '[':
+            
+            
 
 
 def main():  # use the thing from day 7
