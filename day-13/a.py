@@ -38,7 +38,7 @@ def right(pair):
 def format_input1(input):
     output = []
     while "[" in input:
-        beginning = input.rfind("[")
+        beginning = input.rfind("[")  
         end = input.find("]")
         c_value = input[beginning + 1 : end]
         input = input[:beginning] + input[end:]
@@ -50,17 +50,30 @@ def format_input1(input):
     return output[0]
 
 
-def find_outer(input):  # don't be trash
-    pass
+def find_match(input):  # returns index of matching bracket pair input must be valid parenthesis 
+    count = 0
+    for i,item in enumerate(input):
+        if item == '[':
+            count += 1
+        elif item == ']':
+            count -= 1
+            if count == 0:
+                return i
 
 
-def format_input(input,current = None):  # use recursion
-    output = []
-    for i,char in input:
+def format_input(input,output = None):  # use recursion
+    #print(output)
+    if output == None:
+        output = []
+    for i,char in enumerate(input):
         if char == ',':
             continue
         elif char == '[':
-            
+            output.append(format_input(input[i+1:find_match(input[i:])],output = output))
+        elif char.isdigit(): #else
+            output.append(int(char))
+    print(output)
+    return list(output)
             
 
 
@@ -76,5 +89,5 @@ def main():  # use the thing from day 7
 
 if __name__ == "__main__":
     # print(main())
-    print(format_input("[1,[2,[3,[4,[5,6,7]]]],8,9]"))
+    print(format_input('[4,4],4,4'))
     pass
