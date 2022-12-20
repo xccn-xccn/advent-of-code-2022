@@ -1,43 +1,50 @@
-import copy
-def shortest_path(topology, start, end):
-    possible = [[[start],0]]
-    finished = []
-    lowest = 999999999999999999999
-    flag = False
-    while possible:
-        current = possible.pop()
-        for node,time in topology[current[0][-1]].items():
-            if node in current[0]:
-                continue
-            temp = copy.deepcopy(current)
-            temp[0].append(node)
-            temp[1] += time
-            if temp[1] > lowest:
-                continue
-            if node == end:
-                if temp[1] < lowest:
-                    finished = [temp[0]]
-                    lowest = temp[1]
-                elif temp[1] == lowest:
-                    finished.append(temp[0])
-                continue
-            possible.insert(-binary_search([x[1] for x in possible],temp[1]),temp)
-            
-            
-    a = min([len(x) for x in finished])
-    for i,s in enumerate(finished):
-        if len(s) > a:
-            finished.pop(i)
-    return finished
+from sys import argv
 
-def binary_search(arr, x):
-    low,high,mid = 0,len(arr) - 1,0
-    while low <= high:
-        mid = (high + low) // 2
-        if arr[mid] < x:
-            low = mid + 1
-        elif arr[mid] > x:
-            high = mid - 1
-        else:
-            return mid
-    return low
+
+def read_file(filename):
+    with open(filename) as file:
+        text = file.read()
+    return text
+
+
+def get_input_file():
+    if len(argv) == 1:
+        return "sample.txt"
+    elif len(argv) == 2:
+        return argv[1] if argv[1] != "i" else "input.txt"
+
+
+def single_move(head, tail):
+    """Returns a tuple of the coordinates to add to tail (y,x)"""
+    diff_y, diff_x = (head[0] - tail[0], head[1] - tail[1])
+    if 1 >= diff_y >= -1 and 1 >= diff_x >= -1:
+        return (0, 0)
+    elif diff_y == 0:
+        return (0, diff_x // abs(diff_x))
+    elif diff_x == 0:
+        return (diff_y // abs(diff_y), 0)
+    return (diff_y // abs(diff_y), diff_x // abs(diff_x))
+
+
+def main():  # cords are y,x
+    instructions = {
+        "U": (0, 1),
+        "R": (1, 1),
+        "D": (0, -1),
+        "L": (1, -1),
+    }  # index, amount
+    head, tail, been = [0, 0], [0, 0], set()
+    been.add((0, 0))
+    text = read_file(get_input_file()).splitlines()
+    for line in text:
+        index, amount = instructions[line[0]]
+        for repeat in range(int(line.split()[-1])):
+            head[index] += amount
+            move = single_move(head, tail)
+            tail[0], tail[1] = tail[0] + move[0], tail[1] + move[1]
+            been.add(tuple(tail))
+    return len(been)
+
+
+if __name__ == "__main__":
+    print(main())
