@@ -1,5 +1,7 @@
 from sys import argv
+from time import perf_counter
 
+start = perf_counter()
 def read_file(filename):
     with open(filename) as file:
         text = file.read()
@@ -19,3 +21,4 @@ def main():
 
 if __name__ == "__main__":
     print(main())
+    print(f'Time taken: {(perf_counter() - start) *1000} miliseconds')
