@@ -14,6 +14,7 @@ def get_input_file():
     elif len(argv) == 2:
         return argv[1] if argv[1] != "i" else "input.txt"
 
+
 def padd(alist, n):
     return ["0"] * (n) + list(alist)
 
@@ -50,7 +51,7 @@ def add(num1, num2):
             new.append(convert[number])
             extra = 0
     if extra:
-        new.append('1')
+        new.append("1")
     return list(reversed(new))
 
 
